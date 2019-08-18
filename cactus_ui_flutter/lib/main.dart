@@ -1,111 +1,195 @@
 import 'package:flutter/material.dart';
+import 'package:cactus_ui_flutter/data.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(MaterialApp(
+  debugShowCheckedModeBanner: false,
+      title: 'Cactus',
+      theme: ThemeData(fontFamily: 'Joane Stencil'),
+      home: CactusHome(),
+    ));
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class CactusHome extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
+  _CactusHomeState createState() => _CactusHomeState();
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
+class _CactusHomeState extends State<CactusHome> {
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [Color(0xFFF1F1F6), Color(0xFFFFFF)],
+              stops: [0.25, 0.25]),
         ),
+        child: SafeArea(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  InkWell(
+                    onTap: () => debugPrint('menu clicked'),
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: ImageIcon(AssetImage('images/menu-icon.png')),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () => debugPrint('search clicked'),
+                    customBorder: CircleBorder(),
+                    child: Padding(
+                      padding: EdgeInsets.all(9.0),
+                      child: ImageIcon(AssetImage('images/search-icon.png')),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 30.0, left: 40.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Cactus',
+                    style: TextStyle(fontSize: 40),
+                  ),
+                  Text('For Home', style: TextStyle(fontSize: 40))
+                ],
+              ),
+            ),
+            Expanded(
+                child: Container(
+              margin: EdgeInsets.only(top: 20.0, bottom: 15.0),
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * .65,
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final double leftPadding = index == 0 ? 50.0 : 15.0;
+                      return Container(
+                        margin:
+                            EdgeInsets.fromLTRB(leftPadding, 10.0, 15.0, 10.0),
+                        child: SizedBox(
+                          width: 200.0,
+                          child: Stack(
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(top: 40.0),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.black12,
+                                          offset: Offset(0.0, 0.0),
+                                          blurRadius: 10.0),
+                                    ]),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    20.0, 0.0, 20.0, 15.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Center(
+                                      child: Image.asset(
+                                        data[index]['image'],
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                .33,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 40.0,
+                                    ),
+                                    Text(
+                                      '\$ ${data[index]['price']}',
+                                      style: TextStyle(fontSize: 18.0),
+                                    ),
+                                    Text('${data[index]['name']}',
+                                        style: TextStyle(fontSize: 18.0)),
+                                    Expanded(
+                                      child: Container(
+                                        alignment: Alignment.bottomLeft,
+                                        margin: EdgeInsets.only(bottom: 15.0),
+                                        child: Row(
+                                          children: <Widget>[
+                                            Text('Buy Now',
+                                                style:
+                                                    TextStyle(fontSize: 18.0)),
+                                            Container(
+                                              margin:
+                                                  EdgeInsets.only(left: 10.0),
+                                              width: 30.0,
+                                              height: 2.0,
+                                              color: Colors.grey,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+              ),
+            )),
+            SafeArea(
+              child: SizedBox(
+                height: 50.0,
+                child: DefaultTabController(
+                    length: 3,
+                    child: Theme(
+                      data: ThemeData(
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent),
+                      child: TabBar(
+                          labelColor: Colors.black87,
+                          unselectedLabelColor: Colors.grey,
+                          labelPadding: EdgeInsets.only(bottom: 10.0),
+                          indicator: BoxDecoration(
+                              gradient: RadialGradient(
+                                  colors: [
+                                    Colors.black45,
+                                    Colors.black45,
+                                    Colors.transparent
+                                  ],
+                                  center: Alignment(.0, .8),
+                                  radius: .1,
+                                  tileMode: TileMode.clamp,
+                                  stops: [0.3, 0.5, 0.7])),
+                          tabs: [
+                            Tab(
+                              text: 'Popular',
+                            ),
+                            Tab(
+                              text: 'Newest',
+                            ),
+                            Tab(
+                              text: 'Latest',
+                            )
+                          ]),
+                    )),
+              ),
+            )
+          ],
+        )),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
